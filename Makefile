@@ -32,7 +32,7 @@ all: build
 build: $(BINDIR)/$(BINNAME)
 
 $(BINDIR)/$(BINNAME): $(SRC)
-	go build -ldflags '$(LDFLAGS)' -o '$(BINDIR)/$(BINNAME)' ./cmd/uplift
+	go build -ldflags '$(LDFLAGS)' -o '$(BINDIR)/$(BINNAME)' ./cmd/codecommitsign
 
 .PHONY: test
 test:
