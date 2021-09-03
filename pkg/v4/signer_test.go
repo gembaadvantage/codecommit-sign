@@ -26,6 +26,8 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"net/url"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -44,8 +46,57 @@ const (
 	repoUrl = "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/dummy-repo"
 )
 
-// TODO: check region is extracted from URL
-// TODO: invoke signer
+func TestSign(t *testing.T) {
+	creds := aws.Credentials{
+		AccessKeyID:     "ACCESS_KEY_ID",
+		SecretAccessKey: "SECRET_ACCESS_KEY",
+		SessionToken:    "SESSION_TOKEN",
+	}
+
+	s := NewSigner(creds)
+
+	req, err := s.Sign(repoUrl)
+	require.NoError(t, err)
+
+	// Check all parts of the signed URL
+	u, err := url.Parse(req)
+	require.NoError(t, err)
+
+	assert.Equal(t, "https", u.Scheme)
+	assert.Equal(t, creds.AccessKeyID+"%"+creds.SessionToken, u.User.Username())
+
+	// Test password using a regex
+	passw, _ := u.User.Password()
+	rgx := regexp.MustCompile(fmt.Sprintf("^%sZ[a-zA-Z0-9]{64}$", s.requestTime.Format("20060102T150405")))
+	assert.True(t, rgx.MatchString(passw))
+
+	assert.Equal(t, "git-codecommit.eu-west-1.amazonaws.com", u.Host)
+	assert.Equal(t, "/v1/repos/dummy-repo", u.Path)
+}
+
+func TestSign_MalformedUrl(t *testing.T) {
+	s := NewSigner(aws.Credentials{})
+
+	sig, err := s.Sign("https://codecommit.amazonaws.com")
+
+	require.Error(t, err)
+	assert.Empty(t, sig)
+}
+
+func TestIdentifyRegion(t *testing.T) {
+	rgn, err := identifyRegion(repoUrl)
+
+	require.NoError(t, err)
+	assert.Equal(t, "eu-west-1", rgn)
+}
+
+func TestIdentifyRegion_MalformedUrl(t *testing.T) {
+	rgn, err := identifyRegion("https://codecommit.amazonaws.com")
+
+	require.Error(t, err)
+	assert.EqualError(t, err, "no region found in malformed codecommit URL")
+	assert.Empty(t, rgn)
+}
 
 func TestCanonicalRequest(t *testing.T) {
 	v4 := Signer{
