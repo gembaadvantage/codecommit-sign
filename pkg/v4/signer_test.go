@@ -40,6 +40,13 @@ var (
 	requestTime = time.Date(2021, 9, 1, 10, 25, 23, 0, time.UTC)
 )
 
+const (
+	repoUrl = "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/dummy-repo"
+)
+
+// TODO: check region is extracted from URL
+// TODO: invoke signer
+
 func TestCanonicalRequest(t *testing.T) {
 	v4 := Signer{
 		service:     "codecommit",
@@ -49,11 +56,11 @@ func TestCanonicalRequest(t *testing.T) {
 	}
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", "https://eu-west-1.codecommit/repo", http.NoBody)
+	req, err := http.NewRequest("GIT", repoUrl, http.NoBody)
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)
-	assert.Equal(t, "GIT\n/repo\n\nhost:eu-west-1.codecommit\n\nhost\n", string(cr))
+	assert.Equal(t, "GIT\n/v1/repos/dummy-repo\n\nhost:git-codecommit.eu-west-1.amazonaws.com\n\nhost\n", string(cr))
 }
 
 func TestCanonicalRequest_IgnoresPayload(t *testing.T) {
@@ -67,7 +74,7 @@ func TestCanonicalRequest_IgnoresPayload(t *testing.T) {
 	payload := []byte("payload")
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", "https://eu-west-1.codecommit/repo", bytes.NewReader(payload))
+	req, err := http.NewRequest("GIT", repoUrl, bytes.NewReader(payload))
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)
@@ -85,13 +92,13 @@ func TestCanonicalRequest_IgnoresQueryParameters(t *testing.T) {
 	}
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", "https://eu-west-1.codecommit/repo?param=1234", http.NoBody)
+	req, err := http.NewRequest("GIT", repoUrl+"?param=12345", http.NoBody)
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)
 
 	queryParams := ""
-	assert.True(t, strings.HasPrefix(string(cr), fmt.Sprintf("GIT\n/repo\n%s\n", queryParams)))
+	assert.True(t, strings.HasPrefix(string(cr), fmt.Sprintf("GIT\n/v1/repos/dummy-repo\n%s\n", queryParams)))
 }
 
 func TestStringToSign(t *testing.T) {
@@ -102,22 +109,24 @@ func TestStringToSign(t *testing.T) {
 		requestTime: requestTime,
 	}
 
-	canonicalReq := "GIT\n/repo\n\nhost:eu-west-1.codecommit\n\nhost\n"
+	canonicalReq := "GIT\n/v1/repos/dummy-repo\n\nhost:git-codecommit.eu-west-1.amazonaws.com\n\nhost\n"
 
 	sts := v4.stringToSign([]byte(canonicalReq))
-	assert.Equal(t, "AWS4-HMAC-SHA256\n20210901T102523\n20210901/eu-west-1/codecommit/aws4_request\n6f8de131b391656e8b0905c87c7ac2b4efd0c78e8d6aef1abf6e4a642bba0e43", string(sts))
+	assert.Equal(t, "AWS4-HMAC-SHA256\n20210901T102523\n20210901/eu-west-1/codecommit/aws4_request\nb7cad41c14b37f02e4d2deaf4f0773423b7dbe5db34af6b45362223291f968ef", string(sts))
 }
 
 func TestSignature(t *testing.T) {
 	v4 := Signer{
-		service:     "codecommit",
-		region:      "eu-west-1",
-		credentials: aws.Credentials{},
+		service: "codecommit",
+		region:  "eu-west-1",
+		credentials: aws.Credentials{
+			SecretAccessKey: "SECRET_ACCESS_KEY",
+		},
 		requestTime: requestTime,
 	}
 
-	stringToSign := "AWS4-HMAC-SHA256\n20210901T102523\n20210901/eu-west-1/codecommit/aws4_request\n6f8de131b391656e8b0905c87c7ac2b4efd0c78e8d6aef1abf6e4a642bba0e43"
+	stringToSign := "AWS4-HMAC-SHA256\n20210901T102523\n20210901/eu-west-1/codecommit/aws4_request\nb7cad41c14b37f02e4d2deaf4f0773423b7dbe5db34af6b45362223291f968ef"
 
 	sig := v4.signature([]byte(stringToSign))
-	assert.Equal(t, "c315e423bdd21769d77186409a55df2b92cf79869fb5382a207e848b44073aa9", fmt.Sprintf("%x", sig))
+	assert.Equal(t, "670ef0c32f13fc847ed0c001a2b90bc772451c1eb89eadf84a73f3e82da9f56a", fmt.Sprintf("%x", sig))
 }
