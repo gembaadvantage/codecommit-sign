@@ -22,15 +22,18 @@ SOFTWARE.
 
 package main
 
-import "os"
+import (
+	"io"
 
-func main() {
-	cmd, err := newRootCmd(os.Stdout, os.Args[1:])
-	if err != nil {
-		os.Exit(1)
+	"github.com/spf13/cobra"
+)
+
+func newRootCmd(out io.Writer, args []string) (*cobra.Command, error) {
+	cmd := &cobra.Command{
+		Use:          "codecommit-sign",
+		Short:        "",
+		SilenceUsage: true,
 	}
 
-	if err := cmd.Execute(); err != nil {
-		os.Exit(1)
-	}
+	return cmd, nil
 }
