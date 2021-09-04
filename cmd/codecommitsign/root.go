@@ -39,7 +39,7 @@ const (
 
 type signOptions struct {
 	Profile  string
-	CloneUrl string
+	CloneURL string
 }
 
 func newRootCmd(out io.Writer, args []string) *cobra.Command {
@@ -53,7 +53,7 @@ func newRootCmd(out io.Writer, args []string) *cobra.Command {
 		SilenceUsage: true,
 		Args:         cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.CloneUrl = args[0]
+			opts.CloneURL = args[0]
 			return opts.Run(out)
 		},
 	}
@@ -85,7 +85,7 @@ func (o signOptions) Run(out io.Writer) error {
 	}
 
 	signer := awsv4.NewSigner(creds)
-	surl, err := signer.Sign(o.CloneUrl)
+	surl, err := signer.Sign(o.CloneURL)
 	if err != nil {
 		return err
 	}
