@@ -21,7 +21,7 @@
 builds:
   - id: codecommit-sign
     main: ./cmd/codecommit-sign
-    binary: uplift
+    binary: codecommit-sign
     ldflags:
       - -s -w
       - -X github.com/gembaadvantage/codecommit-sign/internal/version.version={{.Tag}}
