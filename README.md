@@ -6,7 +6,7 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/gembaadvantage/codecommit-sign.svg?style=flat-square)](go.mod)
 [![codecov](https://codecov.io/gh/gembaadvantage/codecommit-sign/branch/main/graph/badge.svg)](https://codecov.io/gh/gembaadvantage/codecommit-sign)
 
-DESCRIPTION
+Generate a signed AWS V4 CodeCommit URL without the need for dedicated IAM user credentials.
 
 ## Install
 
@@ -21,14 +21,6 @@ brew tap gembaadvantage/tap
 brew install codecommit-sign
 ```
 
-### Fish
-
-To use [Fish](https://gofi.sh/):
-
-```sh
-gofish install codecommit-sign
-```
-
 ### Scoop
 
 To use [Scoop](https://scoop.sh/):
@@ -39,26 +31,14 @@ scoop install codecommit-sign
 
 ## Quick Start
 
-TODO - link to CLI command or retrieve from the AWS console
+Retreive the HTTPS clone URL to your chosen CodeCommit repository, either through the AWS Console or the AWS CLI. And then sign it:
 
 ```sh
 codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<REPOSITORY_NAME>
 ```
 
-If not using a tool like aws-vault (environment variables aren't correctly set) then a named profile can be provided:
+Depending on your chosen authentication mechanism, you can provide an AWS named profile:
 
 ```sh
 codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<REPOSITORY_NAME> --profile <AWS_PROFILE>
 ```
-
-## Examples
-
-TODO
-
-### AWS Lambda
-
-TODO
-
-### AWS CodeBuild
-
-TODO
