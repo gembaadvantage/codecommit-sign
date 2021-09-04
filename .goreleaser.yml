@@ -70,7 +70,7 @@ brews:
       name: homebrew-tap
     folder: Formula
     homepage: "https://github.com/gembaadvantage/codecommit-sign"
-    description: ""
+    description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
     license: MIT
     install: |
       bin.install "codecommit-sign"
@@ -91,5 +91,5 @@ scoop:
     owner: gembaadvantage
     name: scoops
   homepage: "https://github.com/gembaadvantage/codecommit-sign"
-  description: ""
+  description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
   license: MIT
