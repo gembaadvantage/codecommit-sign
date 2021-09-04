@@ -63,3 +63,33 @@ archives:
       - LICENSE
 signs:
   - artifacts: checksum
+brews:
+  - name: codecommit-sign
+    tap:
+      owner: gembaadvantage
+      name: homebrew-tap
+    folder: Formula
+    homepage: "https://github.com/gembaadvantage/codecommit-sign"
+    description: ""
+    license: MIT
+    install: |
+      bin.install "codecommit-sign"
+
+      bash_output = Utils.safe_popen_read(bin/"codecommit-sign", "completion", "bash")
+      (bash_completion/"codecommit-sign").write bash_output
+
+      zsh_output = Utils.safe_popen_read(bin/"codecommit-sign", "completion", "zsh")
+      (zsh_completion/"_codecommit-sign").write zsh_output
+
+      fish_output = Utils.safe_popen_read(bin/"codecommit-sign", "completion", "fish")
+      (fish_completion/"codecommit-sign.fish").write fish_output
+    test: |
+      installed_version = shell_output("#{bin}/codecommit-sign version --short 2>&1")
+      assert_match "v#{version}", installed_version
+scoop:
+  bucket:
+    owner: gembaadvantage
+    name: scoops
+  homepage: "https://github.com/gembaadvantage/codecommit-sign"
+  description: ""
+  license: MIT
