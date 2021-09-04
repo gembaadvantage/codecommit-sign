@@ -42,7 +42,7 @@ type signOptions struct {
 	CloneUrl string
 }
 
-func newSignCmd(out io.Writer, args []string) *cobra.Command {
+func newRootCmd(out io.Writer, args []string) *cobra.Command {
 	opts := signOptions{}
 
 	cmd := &cobra.Command{
@@ -59,8 +59,9 @@ func newSignCmd(out io.Writer, args []string) *cobra.Command {
 	}
 
 	f := cmd.Flags()
-	f.StringVar(&opts.Profile, "profile", "", "The AWS named profile to use when looking up credentials")
+	f.StringVar(&opts.Profile, "profile", "", "the AWS named profile to use when looking up credentials")
 
+	cmd.AddCommand(newVersionCmd(out), newCompletionCmd(out))
 	return cmd
 }
 
