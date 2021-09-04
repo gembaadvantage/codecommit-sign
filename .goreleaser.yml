@@ -20,7 +20,7 @@
 
 builds:
   - id: codecommit-sign
-    main: ./cmd/codecommit-sign
+    main: ./cmd/codecommitsign
     binary: codecommit-sign
     ldflags:
       - -s -w
