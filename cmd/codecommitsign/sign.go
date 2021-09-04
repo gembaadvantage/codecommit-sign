@@ -73,13 +73,13 @@ func (o signOptions) Run(out io.Writer) error {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), opts...)
 	if err != nil {
-		fmt.Fprintln(out, "")
+		fmt.Fprintln(out, "\u26a0\ufe0f  failed to retrieve default AWS config")
 		return err
 	}
 
 	creds, err := cfg.Credentials.Retrieve(context.TODO())
 	if err != nil {
-		fmt.Fprintln(out, "")
+		fmt.Fprintln(out, "\u26a0\ufe0f  failed to retrieve AWS credentials")
 		return err
 	}
 
