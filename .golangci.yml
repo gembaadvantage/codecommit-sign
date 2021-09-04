@@ -28,12 +28,12 @@ linters:
     - dupl
     - gofmt
     - goimports
-    - golint
     - gosimple
     - govet
     - ineffassign
     - misspell
     - nakedret
+    - revive
     - staticcheck
     - structcheck
     - unused

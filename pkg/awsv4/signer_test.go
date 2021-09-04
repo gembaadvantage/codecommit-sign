@@ -43,7 +43,7 @@ var (
 )
 
 const (
-	repoUrl = "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/dummy-repo"
+	repoURL = "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/dummy-repo"
 )
 
 func TestSign(t *testing.T) {
@@ -55,7 +55,7 @@ func TestSign(t *testing.T) {
 
 	s := NewSigner(creds)
 
-	req, err := s.Sign(repoUrl)
+	req, err := s.Sign(repoURL)
 	require.NoError(t, err)
 
 	// Check all parts of the signed URL
@@ -84,7 +84,7 @@ func TestSign_MalformedUrl(t *testing.T) {
 }
 
 func TestIdentifyRegion(t *testing.T) {
-	rgn, err := identifyRegion(repoUrl)
+	rgn, err := identifyRegion(repoURL)
 
 	require.NoError(t, err)
 	assert.Equal(t, "eu-west-1", rgn)
@@ -107,7 +107,7 @@ func TestCanonicalRequest(t *testing.T) {
 	}
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", repoUrl, http.NoBody)
+	req, err := http.NewRequest("GIT", repoURL, http.NoBody)
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)
@@ -125,7 +125,7 @@ func TestCanonicalRequest_IgnoresPayload(t *testing.T) {
 	payload := []byte("payload")
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", repoUrl, bytes.NewReader(payload))
+	req, err := http.NewRequest("GIT", repoURL, bytes.NewReader(payload))
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)
@@ -143,7 +143,7 @@ func TestCanonicalRequest_IgnoresQueryParameters(t *testing.T) {
 	}
 
 	// Construct a GIT request
-	req, err := http.NewRequest("GIT", repoUrl+"?param=12345", http.NoBody)
+	req, err := http.NewRequest("GIT", repoURL+"?param=12345", http.NoBody)
 	require.NoError(t, err)
 
 	cr := v4.canonicalRequest(req)

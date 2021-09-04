@@ -67,16 +67,16 @@ func NewSigner(creds aws.Credentials) *Signer {
 // Cloning with a signed CodeCommit URL removes the need to generate dedicated user
 // credentials and supports authentication directly from an IAM role within services such
 // as AWS Lambda and AWS CodeBuild
-func (s *Signer) Sign(cloneUrl string) (string, error) {
+func (s *Signer) Sign(cloneURL string) (string, error) {
 	var err error
-	if s.region, err = identifyRegion(cloneUrl); err != nil {
+	if s.region, err = identifyRegion(cloneURL); err != nil {
 		return "", err
 	}
 
 	s.requestTime = time.Now().UTC()
 
 	// Perform all 4 tasks in order to ensure a V4 signature matching the specification is generated
-	req, _ := http.NewRequest("GIT", cloneUrl, http.NoBody)
+	req, _ := http.NewRequest("GIT", cloneURL, http.NoBody)
 
 	cr := s.canonicalRequest(req)
 	sts := s.stringToSign(cr)
@@ -87,7 +87,7 @@ func (s *Signer) Sign(cloneUrl string) (string, error) {
 	passw := fmt.Sprintf("%sZ%s", s.requestTime.Format("20060102T150405"), fmt.Sprintf("%x", sig))
 	uname := url.QueryEscape(s.credentials.AccessKeyID + "%" + s.credentials.SessionToken)
 
-	return strings.Replace(cloneUrl, "https://", fmt.Sprintf("https://%s:%s@", uname, passw), 1), nil
+	return strings.Replace(cloneURL, "https://", fmt.Sprintf("https://%s:%s@", uname, passw), 1), nil
 }
 
 func identifyRegion(url string) (string, error) {
