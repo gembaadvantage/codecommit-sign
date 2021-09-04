@@ -25,10 +25,7 @@ package main
 import "os"
 
 func main() {
-	cmd, err := newRootCmd(os.Stdout, os.Args[1:])
-	if err != nil {
-		os.Exit(1)
-	}
+	cmd := newSignCmd(os.Stdout, os.Args[1:])
 
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
