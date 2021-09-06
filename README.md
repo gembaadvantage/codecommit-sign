@@ -31,14 +31,16 @@ scoop install codecommit-sign
 
 ## Quick Start
 
-Retreive the HTTPS clone URL to your chosen CodeCommit repository, either through the AWS Console or the AWS CLI. And then sign it:
+Retreive (_or construct_) the clone URL to your chosen CodeCommit repository and then sign it. Depending on your chosen authentication mechanism, you may need to provide an AWS named profile through the optional `--profile` flag.
+
+### HTTPS
 
 ```sh
-codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<REPOSITORY_NAME>
+codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository
 ```
 
-Depending on your chosen authentication mechanism, you can provide an AWS named profile:
+### GRC
 
 ```sh
-codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/<REPOSITORY_NAME> --profile <AWS_PROFILE>
+codecommit-sign codecommit::eu-west-1://repository
 ```
