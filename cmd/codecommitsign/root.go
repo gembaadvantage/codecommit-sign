@@ -36,7 +36,7 @@ import (
 
 const (
 	desc = `Generate an AWS authenticated V4 signed CodeCommit URL that can be used to fetch
-and push changes to a CodeCommit repository within your AWS account.
+and push changes to a CodeCommit repository within an AWS account.
 
 Both HTTPS and (git-remote-codecommit) GRC URL formats are supported. If a GRC
 URL is provided, it will automatically be translated into a compatible HTTPS
