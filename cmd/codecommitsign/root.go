@@ -26,15 +26,31 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/gembaadvantage/codecommit-sign/pkg/awsv4"
+	"github.com/gembaadvantage/codecommit-sign/pkg/translate"
 	"github.com/spf13/cobra"
 )
 
 const (
-	desc = ``
-	exs  = ``
+	desc = `Generate an AWS authenticated V4 signed CodeCommit URL that can be used to fetch
+and push changes to a CodeCommit repository within your AWS account.
+
+Both HTTPS and (git-remote-codecommit) GRC URL formats are supported. If a GRC
+URL is provided, it will automatically be translated into a compatible HTTPS
+URL`
+
+	exs = `Sign a CodeCommit HTTPS URL:
+
+$ codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository
+https://<USERNAME>:<PASSWORD>@git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository
+
+Sign a CodeCommit GRC URL:
+
+$ codecommit-sign codecommit::eu-west-1://repository
+https://<USERNAME>:<PASSWORD>@git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository`
 )
 
 type signOptions struct {
@@ -85,6 +101,15 @@ func (o signOptions) Run(out io.Writer) error {
 	}
 
 	signer := awsv4.NewSigner(creds)
+	// Detect if a GRC URL has been provided and translate
+	if strings.HasPrefix(o.CloneURL, "codecommit::") {
+		var terr error
+		o.CloneURL, terr = translate.FromGrc(o.CloneURL)
+		if terr != nil {
+			return terr
+		}
+	}
+
 	surl, err := signer.Sign(o.CloneURL)
 	if err != nil {
 		return err
