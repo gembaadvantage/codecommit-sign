@@ -29,6 +29,16 @@ To use [Scoop](https://scoop.sh/):
 scoop install codecommit-sign
 ```
 
+### Script
+
+To install using a shell script:
+
+```sh
+curl https://raw.githubusercontent.com/gembaadvantage/codecommit-sign/master/scripts/install > install
+chmod 700 install
+./install
+```
+
 ## Quick Start
 
 Retreive (_or construct_) the clone URL to your chosen CodeCommit repository and then sign it. Depending on your chosen authentication mechanism, you may need to provide an AWS named profile through the optional `--profile` flag.
