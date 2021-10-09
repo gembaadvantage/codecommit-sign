@@ -42,7 +42,7 @@ scoop install codecommit-sign
 To install using a shell script:
 
 ```sh
-curl https://raw.githubusercontent.com/gembaadvantage/codecommit-sign/master/scripts/install > install
+curl https://raw.githubusercontent.com/gembaadvantage/codecommit-sign/main/scripts/install > install
 chmod 700 install
 ./install
 ```
