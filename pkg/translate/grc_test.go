@@ -34,8 +34,13 @@ func TestToGrc(t *testing.T) {
 		err      string
 	}{
 		{
-			name:     "Valid",
+			name:     "ValidNoAuthentication",
 			url:      "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
+			expected: "codecommit::eu-west-1://repository",
+		},
+		{
+			name:     "ValidAuthentication",
+			url:      "https://username:password@git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
 			expected: "codecommit::eu-west-1://repository",
 		},
 		{
@@ -56,13 +61,17 @@ func TestToGrc(t *testing.T) {
 			actual, err := ToGrc(tt.url)
 
 			if err != nil {
+				if tt.err == "" {
+					t.Fatalf("unexpected error '%s'", err.Error())
+				}
+
 				if err.Error() != tt.err {
-					t.Errorf("expected %s but received %s\n", tt.err, err)
+					t.Fatalf("expected error '%s' but received error '%s'\n", tt.err, err)
 				}
 			}
 
 			if actual != tt.expected {
-				t.Errorf("expected %s but received %s\n", tt.expected, actual)
+				t.Fatalf("expected %s but received %s\n", tt.expected, actual)
 			}
 		})
 	}
@@ -104,12 +113,12 @@ func TestFromGrc(t *testing.T) {
 
 			if err != nil {
 				if err.Error() != tt.err {
-					t.Errorf("expected %s but received %s\n", tt.err, err)
+					t.Fatalf("expected %s but received %s\n", tt.err, err)
 				}
 			}
 
 			if actual != tt.expected {
-				t.Errorf("expected %s but received %s\n", tt.expected, actual)
+				t.Fatalf("expected %s but received %s\n", tt.expected, actual)
 			}
 		})
 	}
