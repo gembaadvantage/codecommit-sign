@@ -30,7 +30,7 @@ import (
 )
 
 var (
-	urlRgx = regexp.MustCompile(`^https://git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
+	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
 	grcRgx = regexp.MustCompile(`^codecommit::(.+)://(.+)$`)
 )
 
@@ -38,11 +38,11 @@ var (
 // GRC based URL that can be used to fetch and push changes to a CodeCommit repository
 func ToGrc(url string) (string, error) {
 	m := urlRgx.FindStringSubmatch(url)
-	if len(m) < 3 {
+	if len(m) < 4 {
 		return "", errors.New("malformed codecommit HTTPS URL")
 	}
 
-	region := m[1]
+	region := m[2]
 	repo := m[len(m)-1]
 
 	return fmt.Sprintf("codecommit::%s://%s", region, repo), nil
