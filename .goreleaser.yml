@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Gemba Advantage
+# Copyright (c) 2022 Gemba Advantage
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
+
 archives:
   - id: codecommit-sign-archive
     format: tar.gz
@@ -61,8 +62,10 @@ archives:
     files:
       - README.md
       - LICENSE
+
 signs:
   - artifacts: checksum
+
 brews:
   - name: codecommit-sign
     tap:
@@ -86,6 +89,7 @@ brews:
     test: |
       installed_version = shell_output("#{bin}/codecommit-sign version --short 2>&1")
       assert_match "v#{version}", installed_version
+
 scoop:
   bucket:
     owner: gembaadvantage
@@ -93,3 +97,11 @@ scoop:
   homepage: "https://github.com/gembaadvantage/codecommit-sign"
   description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
   license: MIT
+
+rigs:
+  - rig:
+      owner: gembaadvantage
+      name: fish-food
+    homepage: "https://github.com/gembaadvantage/codecommit-sign"
+    description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
+    license: MIT

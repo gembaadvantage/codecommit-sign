@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2021 Gemba Advantage
+Copyright (c) 2022 Gemba Advantage
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -104,7 +104,7 @@ func (o signOptions) Run(out io.Writer) error {
 	// Detect if a GRC URL has been provided and translate
 	if strings.HasPrefix(o.CloneURL, "codecommit::") {
 		var terr error
-		o.CloneURL, terr = translate.FromGrc(o.CloneURL)
+		o.CloneURL, terr = translate.FromGRC(o.CloneURL)
 		if terr != nil {
 			return terr
 		}

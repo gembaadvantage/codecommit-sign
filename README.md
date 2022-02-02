@@ -26,7 +26,9 @@ brew install codecommit-sign
 To use [Fish](https://gofi.sh/):
 
 ```sh
-gofish install codecommit-sign
+gofish rig add https://github.com/gembaadvantage/fish-food
+gofish install github.com/gembaadvantage/fish-food/codecommit-sign
+
 ```
 
 ### Scoop

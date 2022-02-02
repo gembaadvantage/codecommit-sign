@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2021 Gemba Advantage
+Copyright (c) 2022 Gemba Advantage
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -23,44 +23,27 @@ SOFTWARE.
 package translate
 
 import (
-	"errors"
 	"fmt"
-	"regexp"
-	"strings"
-)
-
-var (
-	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
-	grcRgx = regexp.MustCompile(`^codecommit::(.+)://(.+)$`)
 )
 
 // ToGrc translates a CodeCommit HTTPS URL to a compatible CodeCommit (git-remote-codecommit)
 // GRC based URL that can be used to fetch and push changes to a CodeCommit repository
-func ToGrc(url string) (string, error) {
-	m := urlRgx.FindStringSubmatch(url)
-	if len(m) < 4 {
-		return "", errors.New("malformed codecommit HTTPS URL")
+func ToGRC(url string) (string, error) {
+	rem, err := RemoteHTTPS(url)
+	if err != nil {
+		return "", err
 	}
 
-	region := m[2]
-	repo := m[len(m)-1]
-
-	return fmt.Sprintf("codecommit::%s://%s", region, repo), nil
+	return fmt.Sprintf("codecommit::%s://%s", rem.Region, rem.Repository), nil
 }
 
 // FromGrc translates a CodeCommit (git-remote-codecommit) GRC URL to a compatible HTTPS URL
 // that can be used to fetch and push changes to a CodeCommit repository
-func FromGrc(url string) (string, error) {
-	m := grcRgx.FindStringSubmatch(url)
-	if len(m) < 3 {
-		return "", errors.New("malformed codecommit grc URL")
+func FromGRC(url string) (string, error) {
+	rem, err := RemoteGRC(url)
+	if err != nil {
+		return "", err
 	}
 
-	region := m[1]
-	repo := m[len(m)-1]
-	if strings.Contains(repo, "@") {
-		repo = strings.Split(repo, "@")[1]
-	}
-
-	return fmt.Sprintf("https://git-codecommit.%s.amazonaws.com/v1/repos/%s", region, repo), nil
+	return fmt.Sprintf("https://git-codecommit.%s.amazonaws.com/v1/repos/%s", rem.Region, rem.Repository), nil
 }
