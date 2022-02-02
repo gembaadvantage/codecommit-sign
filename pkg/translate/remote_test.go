@@ -29,8 +29,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDissectHTTPS(t *testing.T) {
-	rem, err := DissectHTTPS("https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository")
+func TestRemoteHTTPS(t *testing.T) {
+	rem, err := RemoteHTTPS("https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository")
 
 	require.NoError(t, err)
 	assert.Equal(t, "eu-west-1", rem.Region)
@@ -38,13 +38,13 @@ func TestDissectHTTPS(t *testing.T) {
 	assert.Equal(t, "", rem.Profile)
 }
 
-func TestDissectHTTPS_MalformedURL(t *testing.T) {
-	_, err := DissectHTTPS("https://git-codecommit..amazonaws.com/v1/repos/repository")
+func TestRemoteHTTPS_MalformedURL(t *testing.T) {
+	_, err := RemoteHTTPS("https://git-codecommit..amazonaws.com/v1/repos/repository")
 
 	assert.Errorf(t, err, "malformed codecommit HTTPS URL")
 }
 
-func TestDissectGrc(t *testing.T) {
+func TestRemoteGRC(t *testing.T) {
 	tests := []struct {
 		name       string
 		url        string
@@ -69,7 +69,7 @@ func TestDissectGrc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rem, err := DissectGrc(tt.url)
+			rem, err := RemoteGRC(tt.url)
 
 			require.NoError(t, err)
 			require.Equal(t, tt.region, rem.Region)
@@ -79,8 +79,8 @@ func TestDissectGrc(t *testing.T) {
 	}
 }
 
-func TestDissectGrc_MalformedURL(t *testing.T) {
-	_, err := DissectGrc("codecommit::eu-west-1://")
+func TestRemoteGRC_MalformedURL(t *testing.T) {
+	_, err := RemoteGRC("codecommit::eu-west-1://")
 
-	assert.Errorf(t, err, "malformed codecommit grc URL")
+	assert.Errorf(t, err, "malformed codecommit GRC URL")
 }

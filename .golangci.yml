@@ -40,7 +40,8 @@ linters:
     - varcheck
 
 linters-settings:
-  gofmt:
-    simplify: true
+  gofumpt:
+    lang-version: "1.17"
+    extra-rules: true
   dupl:
     threshold: 400

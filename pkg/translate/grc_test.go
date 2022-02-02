@@ -29,7 +29,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestToGrc(t *testing.T) {
+func TestToGRC(t *testing.T) {
 	tests := []struct {
 		name     string
 		url      string
@@ -48,7 +48,7 @@ func TestToGrc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual, err := ToGrc(tt.url)
+			actual, err := ToGRC(tt.url)
 
 			require.NoError(t, err)
 			require.Equal(t, tt.expected, actual)
@@ -56,14 +56,14 @@ func TestToGrc(t *testing.T) {
 	}
 }
 
-func TestToGrc_MalformedURL(t *testing.T) {
-	url, err := ToGrc("https://git-codecommit..amazonaws.com/v1/repos/repository")
+func TestToGRC_MalformedURL(t *testing.T) {
+	url, err := ToGRC("https://git-codecommit..amazonaws.com/v1/repos/repository")
 
 	require.Error(t, err)
 	assert.Equal(t, "", url)
 }
 
-func TestFromGrc(t *testing.T) {
+func TestFromGRC(t *testing.T) {
 	tests := []struct {
 		name     string
 		url      string
@@ -82,7 +82,7 @@ func TestFromGrc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual, err := FromGrc(tt.url)
+			actual, err := FromGRC(tt.url)
 
 			require.NoError(t, err)
 			require.Equal(t, tt.expected, actual)
@@ -91,7 +91,7 @@ func TestFromGrc(t *testing.T) {
 }
 
 func TestFromGrc_MalformedURL(t *testing.T) {
-	url, err := FromGrc("codecommit::eu-west-1://")
+	url, err := FromGRC("codecommit::eu-west-1://")
 
 	require.Error(t, err)
 	assert.Equal(t, "", url)

@@ -33,20 +33,22 @@ var (
 	grcRgx = regexp.MustCompile(`^codecommit::(.+)://(.+)$`)
 )
 
-// Remote ...
+// Remote provides both details about how the repository is hosted within AWS
+// CodeCommit and it will be accessed
 type Remote struct {
-	//
+	// Repository contains the name of the target repository
 	Repository string
 
-	//
+	// Region identifies the AWS Region of where the remote is located globally
 	Region string
 
-	//
+	// Profile identifies if a named AWS Profile was used when targeting the remote
 	Profile string
 }
 
-// DissectHTTPS ...
-func DissectHTTPS(url string) (Remote, error) {
+// RemoteHTTPS identifies details about an AWS CodeCommit remote based on the provided
+// HTTPS clone URL
+func RemoteHTTPS(url string) (Remote, error) {
 	m := urlRgx.FindStringSubmatch(url)
 	if len(m) < 4 {
 		return Remote{}, errors.New("malformed codecommit HTTPS URL")
@@ -58,11 +60,12 @@ func DissectHTTPS(url string) (Remote, error) {
 	}, nil
 }
 
-// DissectGrc
-func DissectGrc(url string) (Remote, error) {
+// RemoteGRC identifies details about an AWS CodeCommit remote based on the provided
+// GRC (git-remote-codecommit) clone URL
+func RemoteGRC(url string) (Remote, error) {
 	m := grcRgx.FindStringSubmatch(url)
 	if len(m) < 3 {
-		return Remote{}, errors.New("malformed codecommit grc URL")
+		return Remote{}, errors.New("malformed codecommit GRC URL")
 	}
 
 	rem := Remote{

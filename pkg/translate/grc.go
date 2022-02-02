@@ -28,8 +28,8 @@ import (
 
 // ToGrc translates a CodeCommit HTTPS URL to a compatible CodeCommit (git-remote-codecommit)
 // GRC based URL that can be used to fetch and push changes to a CodeCommit repository
-func ToGrc(url string) (string, error) {
-	rem, err := DissectHTTPS(url)
+func ToGRC(url string) (string, error) {
+	rem, err := RemoteHTTPS(url)
 	if err != nil {
 		return "", err
 	}
@@ -39,8 +39,8 @@ func ToGrc(url string) (string, error) {
 
 // FromGrc translates a CodeCommit (git-remote-codecommit) GRC URL to a compatible HTTPS URL
 // that can be used to fetch and push changes to a CodeCommit repository
-func FromGrc(url string) (string, error) {
-	rem, err := DissectGrc(url)
+func FromGRC(url string) (string, error) {
+	rem, err := RemoteGRC(url)
 	if err != nil {
 		return "", err
 	}

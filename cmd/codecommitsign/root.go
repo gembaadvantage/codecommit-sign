@@ -104,7 +104,7 @@ func (o signOptions) Run(out io.Writer) error {
 	// Detect if a GRC URL has been provided and translate
 	if strings.HasPrefix(o.CloneURL, "codecommit::") {
 		var terr error
-		o.CloneURL, terr = translate.FromGrc(o.CloneURL)
+		o.CloneURL, terr = translate.FromGRC(o.CloneURL)
 		if terr != nil {
 			return terr
 		}
