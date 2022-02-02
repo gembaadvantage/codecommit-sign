@@ -21,3 +21,62 @@ SOFTWARE.
 */
 
 package translate
+
+import (
+	"errors"
+	"regexp"
+	"strings"
+)
+
+var (
+	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
+	grcRgx = regexp.MustCompile(`^codecommit::(.+)://(.+)$`)
+)
+
+// Remote ...
+type Remote struct {
+	//
+	Repository string
+
+	//
+	Region string
+
+	//
+	Profile string
+}
+
+// DissectHTTPS ...
+func DissectHTTPS(url string) (Remote, error) {
+	m := urlRgx.FindStringSubmatch(url)
+	if len(m) < 4 {
+		return Remote{}, errors.New("malformed codecommit HTTPS URL")
+	}
+
+	return Remote{
+		Repository: m[len(m)-1],
+		Region:     m[2],
+	}, nil
+}
+
+// DissectGrc
+func DissectGrc(url string) (Remote, error) {
+	m := grcRgx.FindStringSubmatch(url)
+	if len(m) < 3 {
+		return Remote{}, errors.New("malformed codecommit grc URL")
+	}
+
+	rem := Remote{
+		Region: m[1],
+	}
+
+	// GRC supports prefixing the repository name with an optional AWS profile
+	rem.Repository = m[len(m)-1]
+	if strings.Contains(rem.Repository, "@") {
+		p := strings.Split(rem.Repository, "@")
+
+		rem.Repository = p[1]
+		rem.Profile = p[0]
+	}
+
+	return rem, nil
+}

@@ -24,6 +24,9 @@ package translate
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestToGrc(t *testing.T) {
@@ -31,7 +34,6 @@ func TestToGrc(t *testing.T) {
 		name     string
 		url      string
 		expected string
-		err      string
 	}{
 		{
 			name:     "ValidNoAuthentication",
@@ -43,38 +45,22 @@ func TestToGrc(t *testing.T) {
 			url:      "https://username:password@git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
 			expected: "codecommit::eu-west-1://repository",
 		},
-		{
-			name:     "NoRegion",
-			url:      "https://git-codecommit..amazonaws.com/v1/repos/repository",
-			expected: "",
-			err:      "malformed codecommit HTTPS URL",
-		},
-		{
-			name:     "NoRepositoryName",
-			url:      "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/",
-			expected: "",
-			err:      "malformed codecommit HTTPS URL",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			actual, err := ToGrc(tt.url)
 
-			if err != nil {
-				if tt.err == "" {
-					t.Fatalf("unexpected error '%s'", err.Error())
-				}
-
-				if err.Error() != tt.err {
-					t.Fatalf("expected error '%s' but received error '%s'\n", tt.err, err)
-				}
-			}
-
-			if actual != tt.expected {
-				t.Fatalf("expected %s but received %s\n", tt.expected, actual)
-			}
+			require.NoError(t, err)
+			require.Equal(t, tt.expected, actual)
 		})
 	}
+}
+
+func TestToGrc_MalformedURL(t *testing.T) {
+	url, err := ToGrc("https://git-codecommit..amazonaws.com/v1/repos/repository")
+
+	require.Error(t, err)
+	assert.Equal(t, "", url)
 }
 
 func TestFromGrc(t *testing.T) {
@@ -82,7 +68,6 @@ func TestFromGrc(t *testing.T) {
 		name     string
 		url      string
 		expected string
-		err      string
 	}{
 		{
 			name:     "NoNamedProfile",
@@ -94,32 +79,20 @@ func TestFromGrc(t *testing.T) {
 			url:      "codecommit::eu-west-1://profile@repository",
 			expected: "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
 		},
-		{
-			name:     "NoRegion",
-			url:      "codecommit::://repository",
-			expected: "",
-			err:      "malformed codecommit grc URL",
-		},
-		{
-			name:     "NoRepositoryName",
-			url:      "codecommit::eu-west-1://",
-			expected: "",
-			err:      "malformed codecommit grc URL",
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			actual, err := FromGrc(tt.url)
 
-			if err != nil {
-				if err.Error() != tt.err {
-					t.Fatalf("expected %s but received %s\n", tt.err, err)
-				}
-			}
-
-			if actual != tt.expected {
-				t.Fatalf("expected %s but received %s\n", tt.expected, actual)
-			}
+			require.NoError(t, err)
+			require.Equal(t, tt.expected, actual)
 		})
 	}
+}
+
+func TestFromGrc_MalformedURL(t *testing.T) {
+	url, err := FromGrc("codecommit::eu-west-1://")
+
+	require.Error(t, err)
+	assert.Equal(t, "", url)
 }
