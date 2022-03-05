@@ -23,7 +23,9 @@ SOFTWARE.
 package translate
 
 import (
+	"errors"
 	"fmt"
+	"os"
 )
 
 // ToGrc translates a CodeCommit HTTPS URL to a compatible CodeCommit (git-remote-codecommit)
@@ -43,6 +45,13 @@ func FromGRC(url string) (string, error) {
 	rem, err := RemoteGRC(url)
 	if err != nil {
 		return "", err
+	}
+
+	// If a region is not set, check if one is provided through the AWS_REGION environment variable
+	if rem.Region == "" {
+		if rem.Region = os.Getenv("AWS_REGION"); rem.Region == "" {
+			return "", errors.New("no aws region identified")
+		}
 	}
 
 	return fmt.Sprintf("https://git-codecommit.%s.amazonaws.com/v1/repos/%s", rem.Region, rem.Repository), nil
