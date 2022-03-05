@@ -64,3 +64,9 @@ codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/reposito
 ```sh
 codecommit-sign codecommit::eu-west-1://repository
 ```
+
+All GRC variants are supported:
+
+- `codecommit://repository`
+- `codecommit://profile@repository`
+- `codecommit::region://profile@repository`
