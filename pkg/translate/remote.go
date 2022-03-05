@@ -30,7 +30,7 @@ import (
 
 var (
 	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
-	grcRgx = regexp.MustCompile(`^codecommit::(.+)://(.+)$`)
+	grcRgx = regexp.MustCompile(`^codecommit:(:.+:)?//(.+)$`)
 )
 
 // Remote provides both details about how the repository is hosted within AWS
@@ -39,7 +39,7 @@ type Remote struct {
 	// Repository contains the name of the target repository
 	Repository string
 
-	// Region identifies the AWS Region of where the remote is located globally
+	// Region identifies if an AWS Region was used when targeting the remote
 	Region string
 
 	// Profile identifies if a named AWS Profile was used when targeting the remote
@@ -69,7 +69,7 @@ func RemoteGRC(url string) (Remote, error) {
 	}
 
 	rem := Remote{
-		Region: m[1],
+		Region: strings.ReplaceAll(m[1], ":", ""),
 	}
 
 	// GRC supports prefixing the repository name with an optional AWS profile

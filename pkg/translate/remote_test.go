@@ -54,13 +54,27 @@ func TestRemoteGRC(t *testing.T) {
 	}{
 		{
 			name:       "NoNamedProfile",
+			url:        "codecommit://repository",
+			region:     "",
+			repository: "repository",
+			profile:    "",
+		},
+		{
+			name:       "NamedProfile",
+			url:        "codecommit://profile@repository",
+			region:     "",
+			repository: "repository",
+			profile:    "profile",
+		},
+		{
+			name:       "NoNamedProfileWithRegion",
 			url:        "codecommit::eu-west-1://repository",
 			region:     "eu-west-1",
 			repository: "repository",
 			profile:    "",
 		},
 		{
-			name:       "NamedProfile",
+			name:       "NamedProfileWithRegion",
 			url:        "codecommit::eu-west-1://profile@repository",
 			region:     "eu-west-1",
 			repository: "repository",

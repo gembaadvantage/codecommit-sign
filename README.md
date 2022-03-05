@@ -51,7 +51,7 @@ chmod 700 install
 
 ## Quick Start
 
-Retreive (_or construct_) the clone URL to your chosen CodeCommit repository and then sign it. Depending on your chosen authentication mechanism, you may need to provide an AWS named profile through the optional `--profile` flag.
+Retrieve (_or construct_) the clone URL to your chosen CodeCommit repository and then sign it. Depending on your chosen authentication mechanism, you may need to provide an AWS named profile through the optional `--profile` flag.
 
 ### HTTPS
 
@@ -64,3 +64,9 @@ codecommit-sign https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/reposito
 ```sh
 codecommit-sign codecommit::eu-west-1://repository
 ```
+
+All GRC variants are supported:
+
+- `codecommit://repository`
+- `codecommit://profile@repository`
+- `codecommit::region://profile@repository`

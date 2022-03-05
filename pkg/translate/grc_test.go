@@ -23,6 +23,7 @@ SOFTWARE.
 package translate
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -65,29 +66,55 @@ func TestToGRC_MalformedURL(t *testing.T) {
 
 func TestFromGRC(t *testing.T) {
 	tests := []struct {
-		name     string
-		url      string
-		expected string
+		name          string
+		url           string
+		defaultRegion string
+		expected      string
 	}{
 		{
-			name:     "NoNamedProfile",
-			url:      "codecommit::eu-west-1://repository",
-			expected: "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
+			name:          "NoNamedProfile",
+			url:           "codecommit://repository",
+			defaultRegion: "eu-west-1",
+			expected:      "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
 		},
 		{
-			name:     "IgnoresNamedProfile",
-			url:      "codecommit::eu-west-1://profile@repository",
-			expected: "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
+			name:          "IgnoresNamedProfile",
+			url:           "codecommit://profile@repository",
+			defaultRegion: "eu-west-1",
+			expected:      "https://git-codecommit.eu-west-1.amazonaws.com/v1/repos/repository",
+		},
+		{
+			name:          "NoNamedProfileWithRegion",
+			url:           "codecommit::eu-west-2://repository",
+			defaultRegion: "eu-west-1",
+			expected:      "https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/repository",
+		},
+		{
+			name:          "IgnoresNamedProfileWithRegion",
+			url:           "codecommit::eu-west-2://profile@repository",
+			defaultRegion: "eu-west-1",
+			expected:      "https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/repository",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			os.Setenv("AWS_REGION", tt.defaultRegion)
+
 			actual, err := FromGRC(tt.url)
 
 			require.NoError(t, err)
 			require.Equal(t, tt.expected, actual)
 		})
 	}
+}
+
+func TestFromGRC_NoRegionSet(t *testing.T) {
+	os.Setenv("AWS_REGION", "")
+
+	url, err := FromGRC("codecommit://repository")
+
+	require.Errorf(t, err, "no aws region identified")
+	assert.Equal(t, "", url)
 }
 
 func TestFromGrc_MalformedURL(t *testing.T) {
