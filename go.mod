@@ -3,7 +3,7 @@ module github.com/gembaadvantage/codecommit-sign
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.16.3
+	github.com/aws/aws-sdk-go-v2 v1.16.4
 	github.com/aws/aws-sdk-go-v2/config v1.15.4
 	github.com/spf13/cobra v1.3.0
 	github.com/stretchr/testify v1.7.1
