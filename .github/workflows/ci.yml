@@ -30,13 +30,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_UPLIFT }}
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.17
+          go-version: 1.18
       - name: Install Task
         uses: arduino/setup-task@v1
       - name: Lint
@@ -49,10 +46,21 @@ jobs:
         uses: codecov/codecov-action@v3.1.0
       - name: Build
         run: task build
-      - name: Tag
-        if: github.ref == 'refs/heads/main'
+
+  # Only run if the ci job is successful
+  release:
+    needs: ci
+    if: github.ref == 'refs/heads/main' && always() && (needs.ci.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_UPLIFT }}
+      - name: Release
         uses: gembaadvantage/uplift-action@v2.0.1
         with:
-          args: release
+          args: release --skip-changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GH_UPLIFT }}

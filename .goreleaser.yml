@@ -97,11 +97,3 @@ scoop:
   homepage: "https://github.com/gembaadvantage/codecommit-sign"
   description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
   license: MIT
-
-rigs:
-  - rig:
-      owner: gembaadvantage
-      name: fish-food
-    homepage: "https://github.com/gembaadvantage/codecommit-sign"
-    description: "Generate a signed AWS V4 CodeCommit URL directly from an IAM role. No dedicated CodeCommit credentials needed"
-    license: MIT
