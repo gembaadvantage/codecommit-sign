@@ -21,16 +21,6 @@ brew tap gembaadvantage/tap
 brew install codecommit-sign
 ```
 
-### GoFish
-
-To use [Fish](https://gofi.sh/):
-
-```sh
-gofish rig add https://github.com/gembaadvantage/fish-food
-gofish install github.com/gembaadvantage/fish-food/codecommit-sign
-
-```
-
 ### Scoop
 
 To use [Scoop](https://scoop.sh/):
