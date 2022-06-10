@@ -59,6 +59,22 @@ To install from the [aur](https://archlinux.org/) using [yay](https://github.com
 yay -S codecommit-sign-bin
 ```
 
+### Linux Packages
+
+Download and manually install one of the .deb, .rpm or .apk packages from the [Releases](https://github.com/gembaadvantage/codecommit-sign/releases) page.
+
+```sh
+sudo apt install codecommit-sign_*.deb
+```
+
+```sh
+sudo yum localinstall codecommit-sign-*.rpm
+```
+
+```sh
+sudo apk add --no-cache --allow-untrusted codecommit-sign_*.apk
+```
+
 ### Script
 
 To install using a shell script:
