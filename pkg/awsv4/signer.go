@@ -38,7 +38,7 @@ import (
 )
 
 var (
-	urlRgx = regexp.MustCompile(`^https://git-codecommit\.(.*)\.amazonaws.com/v1/repos/.*$`)
+	urlRgx = regexp.MustCompile(`^https://git-codecommit\.(.*)\.(amazonaws\.com|amazonaws\.com\.cn)/v1/repos/.*$`)
 )
 
 // Signer implements the AWS authenticated V4 Signature Specification for

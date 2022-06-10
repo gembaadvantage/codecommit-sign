@@ -108,6 +108,33 @@ func TestFromGRC(t *testing.T) {
 	}
 }
 
+func TestFromGRC_ChinaRegions(t *testing.T) {
+	tests := []struct {
+		name     string
+		url      string
+		expected string
+	}{
+		{
+			name:     "ChinaBeijing",
+			url:      "codecommit::cn-north-1://repository",
+			expected: "https://git-codecommit.cn-north-1.amazonaws.com.cn/v1/repos/repository",
+		},
+		{
+			name:     "ChinaNingxia",
+			url:      "codecommit::cn-northwest-1://repository",
+			expected: "https://git-codecommit.cn-northwest-1.amazonaws.com.cn/v1/repos/repository",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			actual, err := FromGRC(tt.url)
+
+			require.NoError(t, err)
+			require.Equal(t, tt.expected, actual)
+		})
+	}
+}
+
 func TestFromGRC_NoRegionSet(t *testing.T) {
 	os.Setenv("AWS_REGION", "")
 
