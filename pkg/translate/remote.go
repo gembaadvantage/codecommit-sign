@@ -29,7 +29,7 @@ import (
 )
 
 var (
-	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.amazonaws.com/v1/repos/(.+)$`)
+	urlRgx = regexp.MustCompile(`^https://(.+@)?git-codecommit\.(.+)\.(amazonaws.com|amazonaws.com.cn)/v1/repos/(.+)$`)
 	grcRgx = regexp.MustCompile(`^codecommit:(:.+:)?//(.+)$`)
 )
 
@@ -50,7 +50,7 @@ type Remote struct {
 // HTTPS clone URL
 func RemoteHTTPS(url string) (Remote, error) {
 	m := urlRgx.FindStringSubmatch(url)
-	if len(m) < 4 {
+	if len(m) < 5 {
 		return Remote{}, errors.New("malformed codecommit HTTPS URL")
 	}
 

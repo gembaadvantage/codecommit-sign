@@ -38,6 +38,15 @@ func TestRemoteHTTPS(t *testing.T) {
 	assert.Equal(t, "", rem.Profile)
 }
 
+func TestRemoteHTTPS_ChinaRegion(t *testing.T) {
+	rem, err := RemoteHTTPS("https://git-codecommit.cn-north-1.amazonaws.com.cn/v1/repos/repository")
+
+	require.NoError(t, err)
+	assert.Equal(t, "cn-north-1", rem.Region)
+	assert.Equal(t, "repository", rem.Repository)
+	assert.Equal(t, "", rem.Profile)
+}
+
 func TestRemoteHTTPS_MalformedURL(t *testing.T) {
 	_, err := RemoteHTTPS("https://git-codecommit..amazonaws.com/v1/repos/repository")
 

@@ -77,7 +77,7 @@ func newRootCmd(out io.Writer, args []string) *cobra.Command {
 	f := cmd.Flags()
 	f.StringVar(&opts.Profile, "profile", "", "the AWS named profile to use when looking up credentials")
 
-	cmd.AddCommand(newVersionCmd(out), newCompletionCmd(out))
+	cmd.AddCommand(newVersionCmd(out), newCompletionCmd(out), newManPagesCmd(out))
 	return cmd
 }
 

@@ -54,5 +54,10 @@ func FromGRC(url string) (string, error) {
 		}
 	}
 
-	return fmt.Sprintf("https://git-codecommit.%s.amazonaws.com/v1/repos/%s", rem.Region, rem.Repository), nil
+	domain := "amazonaws.com"
+	if rem.Region == "cn-north-1" || rem.Region == "cn-northwest-1" {
+		domain = "amazonaws.com.cn"
+	}
+
+	return fmt.Sprintf("https://git-codecommit.%s.%s/v1/repos/%s", rem.Region, domain, rem.Repository), nil
 }
