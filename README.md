@@ -29,6 +29,36 @@ To use [Scoop](https://scoop.sh/):
 scoop install codecommit-sign
 ```
 
+### Yum
+
+To install using the yum package manager:
+
+```sh
+echo '[codecommit-sign]
+name=uplift
+baseurl=https://yum.fury.io/ga-paul-t/
+enabled=1
+gpgcheck=0' | sudo tee /etc/yum.repos.d/codecommit-sign.repo
+sudo yum install -y codecommit-sign
+
+```
+
+### Apt
+
+```sh
+echo 'deb [trusted=yes] https://apt.fury.io/ga-paul-t/ /' | sudo tee /etc/apt/sources.list.d/codecommit-sign.list
+sudo apt update
+sudo apt install -y codecommit-sign
+```
+
+### Aur
+
+To install from the [aur](https://archlinux.org/) using [yay](https://github.com/Jguer/yay):
+
+```sh
+yay -S codecommit-sign-bin
+```
+
 ### Script
 
 To install using a shell script:
