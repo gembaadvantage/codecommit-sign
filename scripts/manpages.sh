@@ -4,4 +4,4 @@
 set -e
 rm -rf manpages
 mkdir manpages
-go run ./cmd/codecommit-sign/... man | gzip -c -9 > manpages/codecommit-sign.1.gz
+go run ./cmd/codecommitsign/... man | gzip -c -9 > manpages/codecommit-sign.1.gz
