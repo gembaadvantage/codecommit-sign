@@ -38,7 +38,7 @@ import (
 )
 
 var (
-	urlRgx = regexp.MustCompile(`^https://git-codecommit\.(.*)\.(amazonaws\.com|amazonaws\.com\.cn)/v1/repos/.*$`)
+	urlRgx = regexp.MustCompile(`^https://(git-codecommit|git-codecommit-fips)\.(.*)\.(amazonaws\.com|amazonaws\.com\.cn)/v1/repos/.*$`)
 )
 
 // Signer implements the AWS authenticated V4 Signature Specification for
@@ -92,7 +92,7 @@ func (s *Signer) Sign(cloneURL string) (string, error) {
 
 func identifyRegion(url string) (string, error) {
 	if m := urlRgx.FindStringSubmatch(url); len(m) > 1 {
-		return m[1], nil
+		return m[2], nil
 	}
 
 	return "", errors.New("no region found in malformed codecommit URL")
