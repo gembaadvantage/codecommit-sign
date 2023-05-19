@@ -1,4 +1,4 @@
-module github.com/gembaadvantage/codecommit-sign
+module github.com/mkeener/codecommit-sign
 
 go 1.18
 
