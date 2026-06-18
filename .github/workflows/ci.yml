@@ -59,7 +59,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GH_UPLIFT }}
       - name: Release
-        uses: gembaadvantage/uplift-action@v2.0.1
+        uses: gembaadvantage/uplift-action@v2.0.2
         with:
           args: release --skip-changelog
         env:
